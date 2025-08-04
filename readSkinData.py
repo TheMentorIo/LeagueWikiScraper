@@ -14,6 +14,7 @@ class SkinDataProcessor:
         self.champion_skin_data = {}
         self.load_champions_skin()
         self.cat_art_list=["Centered", "Circles", "Loading", "Splashes", "Squares", "Tiles"]
+        self.skills = ["passive","q","r","w","e"]
 
     def solve_quote_problem(self):
         """Solve quote problem in directory names"""
@@ -138,8 +139,16 @@ class SkinDataProcessor:
                 missing = set(self.cat_art_list) - set(arts)
                 if missing:
                     print(f"Skin '{skin}' of champion '{champion}' is missing: {missing}")
+                    
+    def check_skill(self):
+        for champion in self.directories:
+            source = os.path.join(self.path,champion,"skills")
+            skills = [skill for skill in os.listdir(source) if os.path.isdir(os.path.join(source,skill))]
+            missing = set(skills)^set(self.skills)
+            if(missing):
+                print(champion)
 
 # Example usage:
 if __name__ == "__main__":
     reader =SkinDataProcessor()
-    reader.check_art_cat()
+    reader.check_skill()
